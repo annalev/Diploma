@@ -1,0 +1,134 @@
+<ion-view title="{{ 'SCHOOL-DIARY-HOME' | translate }}" ng-controller="homeCtrl" cache-view="false" data-ng-init="initData()">
+    <ion-content overflow-scroll="true">
+        <div class="list card">
+            <div class="item item-thumbnail-left">
+                <img src="img/icon.png">
+
+                <h3 class="welcome-message">{{ 'WELCOME-MESSAGE' | translate }}</h3>
+                <h3 class="clearboth {{checkIsLoggedIn()}} loggedInAs"></h3>
+            </div>
+
+            <img class="scale-image-75" src="img/4014541800_a40d882eab.jpg">
+            <p>
+                {{'HOME-MESSAGE' | translate}}
+            </p>
+        </div>
+
+        <div class="list card {{teacherScope()}}">
+            <button type="submit" class="item item-divider button-submit" ng-model="hideAddClass"
+                    ng-click="hideAddClass=!hideAddClass">
+                {{ 'ADD-CLASS' | translate }}
+            </button>
+
+            <div ng-show="hideAddClass" class="item item-body">
+                <div class="list">
+                    <label class="item item-input">
+                        <div class="input-label">{{ 'YEAR' | translate }}: </div>
+                        <input type="text" ng-model="showIntPicker.year" readonly ng-click="showIntPicker()">
+                    </label>
+
+                    <label class="item item-input">
+                    <div class="input-label">{{ 'FORM' | translate }}: </div>
+                    <input type="text" style="text-transform:uppercase" maxlength="1" onkeypress='return event.charCode >= 48 && event.charCode >= 57' ng-model="class.form">
+                        </label>
+                    </form>
+                </div>
+                <div class="item item-body center">
+                    <button class="button button-balanced wide-button" ng-click="addClass(class.form)">{{ 'ADD-CLASS' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="list card {{teacherScope()}}">
+            <div class="item item-divider">
+                {{ 'YOUR-CLASSES' | translate }}
+            </div>
+            <div class="item item-body" ng-show="initData.classes == 0">
+                <small>No Classes To Show</small>
+             </div>
+
+            <div class="item item-body">
+                <ion-list ng-repeat="taughtClass in initData.classes">
+                    <a class="item item-icon-left" href="#" ng-click="editFeedback(student.feedbackId)">
+                        <i class="icon ion-university"></i>
+                        <ul>
+                            <li>
+                                <small><b>{{ 'YEAR' | translate }}: </b>{{taughtClass.year + " " + taughtClass.form}}</small>
+                            </li>
+
+                            <li>
+                                <small><b>{{ 'TEACHER' | translate }}: </b>{{taughtClass.title + " " + taughtClass.firstname + " " + taughtClass.surname}}</small>
+                            </li>
+                        </ul>
+                    </a>
+                </ion-list>
+            </div>
+        </div>
+
+        <div class="list card {{parentScope()}}">
+            <div class="item item-divider">
+                My Children
+            </div>
+            <div class="item item-body" ng-hide="initData.children > 0">
+                <label class="item item-input" ng-repeat="child in initData.children">
+                    <span class="input-label">{{child.firstname + " " + child.surname}}</span>
+                </label>
+
+                <label class="item item-input" ng-show="initData.children == 0">
+                    <span class="input-label">{{ 'YOU-HAVE-NO-CHILDREN' | translate }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="list card {{parentScope()}}">
+            <form ng-submit="pupilSearch()">
+                <a href="#" class="item item-divider pupil-search-title" ng-model="hidden" ng-click="hidden=!hidden">
+                    {{ 'SEARCH-FOR-MY-CHILD' | translate }} <small>{{ 'BY-USERNAME' | translate }}</small>
+                </a>
+                <div class="pupil-search-body" ng-show="hidden">
+                    <label class="item item-input">
+                        <input type="text" placeholder="{{ 'USERNAME' | translate }}" ng-model="pupilSearch.searchTerm">
+                        <button type="submit" class="button button-balanced ion-search pull-right">
+                            {{ 'SEARCH' | translate }}
+                        </button>
+                    </label>
+
+                    <div class="item item-body student-search hidden">
+                        <ion-radio ng-click="selectStudent(student)" ng-repeat="student in pupilSearch.returnedStudent"
+                                   ng-hide="pupilSearch.returnedStudent == 0">
+                            <b>{{ 'USERNAME' | translate }}{{": "  + student.username}}</b> <br/>
+                            <small>{{ 'SURNAME' | translate }}{{": "  + student.surname}}</small>
+                        </ion-radio>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="list card {{studentScope()}}">
+            <div class="item item-divider">
+                My Classes
+            </div>
+            <div class="item item-body">
+                <ion-list ng-repeat="class in initData.myClasses" ng-hide="initData.myClasses > 0">
+                    <a class="item item-icon-left" href="#">
+                        <i class="icon ion-university"></i>
+                        <ul>
+                            <li>
+                                <small><b>{{ 'YEAR' | translate }}: </b>{{" " + class.year +  " " + class.form}}</small>
+                            </li>
+                            <!--<li>-->
+                                <!--<small><b>{{ 'SUBJECT' | translate }}: </b>{{" " + class.subject}}</small>-->
+                            <!--</li>-->
+
+                            <li>
+                                <small><b>{{ 'TEACHER' | translate }}: </b>{{class.title + " " + class.firstname + " " + taughtClass.surname}}</small>
+                            </li>
+                        </ul>
+                    </a>
+                </ion-list>
+            </div>
+        </div>
+        <my-login-pane></my-login-pane>
+    </ion-content>
+</ion-view>
